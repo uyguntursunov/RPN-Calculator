@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MainViewControllerDelegate: AnyObject {
-    func didTapNumberButton(_ character: String)
+    func didTapNumberButton(_ num: Button)
     func didTapOperatorButton(_ op: Button)
     func didTapBackspaceButton()
     func didTapDecimalButton()
@@ -16,12 +16,19 @@ protocol MainViewControllerDelegate: AnyObject {
     func didTapCloseParenthesisButton()
     func didTapEqualsButton()
     func didTapClearButton()
+    func didTapMicButton()
 }
 
 class MainViewController: UIViewController {
     
     private let buttonsStackView = ButtonsStackView()
     private let labelScrollView = LabelScrollView()
+    
+    private lazy var speechController: SpeechController = {
+        let speechController = SpeechController()
+        speechController.delegate = self
+        return speechController
+    }()
     
     var calculations: [CalculationEntity] = []
     
@@ -34,6 +41,7 @@ class MainViewController: UIViewController {
     private var openParenthesisCount: Int = 0
     private var closeParenthesisCount: Int = 0
     private var isRecalculation: Bool = false
+    private var isRecording: Bool = false
     
     var calculator: Calculator = Calculator(expression: [], result: 0.0)
     
@@ -48,11 +56,39 @@ class MainViewController: UIViewController {
         }
     }
     
+    private lazy var textAndButton: Dictionary<String, String> = {
+        return ["zero": "0",
+                "one": "1",
+                "two": "2",
+                "three": "3",
+                "four": "4",
+                "five": "5",
+                "six": "6",
+                "seven": "7",
+                "eight": "8",
+                "nine": "9",
+                "ten": "10",
+                "plus": "+",
+                "minus": "-",
+                "equals": "=",
+                "0": "0",
+                "1": "1",
+                "2": "2",
+                "3": "3",
+                "4": "4",
+                "5": "5",
+                "6": "6",
+                "7": "7",
+                "8": "8",
+                "9": "9",
+                "10": "10",]
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureLayout()
-        fetchCalculations()
+//        fetchCalculations()
     }
     
     private func configureLayout() {
@@ -93,27 +129,27 @@ class MainViewController: UIViewController {
 // MARK: MainViewControllerDelegate Button Actions
 
 extension MainViewController: MainViewControllerDelegate {
-    func didTapNumberButton(_ character: String) {
-        guard let button = Button(rawValue: character), button.isNumber else { return }
+    func didTapNumberButton(_ num: Button) {
+        guard num.isNumber, firstElement != Errors.undefined.rawValue else { return }
         
         if isRecalculation || expression == ["0"] {
-            expression = [character]
+            expression = [num.rawValue]
         } else if lastElement == Button.openParenthesis.rawValue || (lastElement == Button.subtract.rawValue && isNegativeNumber) {
             // Combine with "-" if it's part of a negative number
             if lastElement == Button.subtract.rawValue {
                 expression.removeLast() // Remove standalone "-"
-                expression.append("-\(character)")
+                expression.append("-\(num.rawValue)")
             } else {
-                expression.append(character)
+                expression.append(num.rawValue)
             }
         } else if Double(lastElement) != nil || (lastElement.starts(with: "-") && Double(lastElement.dropFirst()) != nil) {
-            let currentNumber = lastElement + character
+            let currentNumber = lastElement + num.rawValue
             let normalizedNumber = normalizeNumber(currentNumber)
             expression[expression.count - 1] = normalizedNumber
         } else if lastElement == Button.closeParenthesis.rawValue {
-            expression += [Button.multiply.rawValue, character]
+            expression += [Button.multiply.rawValue, num.rawValue]
         } else {
-            expression.append(character)
+            expression.append(num.rawValue)
         }
         
         isRecalculation = false
@@ -231,7 +267,7 @@ extension MainViewController: MainViewControllerDelegate {
         updateClearButton(isBackspace: false)
         isRecalculation = true
         isNegativeNumber = false
-        saveCalculation(model: Calculator(expression: expression, result: calculationResult))
+//        saveCalculation(model: Calculator(expression: expression, result: calculationResult))
     }
     
     func didTapBackspaceButton() {
@@ -257,6 +293,17 @@ extension MainViewController: MainViewControllerDelegate {
     
     func didTapClearButton() {
         expression = ["0"]
+    }
+    
+    func didTapMicButton() {
+        isRecording.toggle()
+        if isRecording {
+            startRecording()
+        } else {
+            stopRecording()
+        }
+        
+        buttonsStackView.updateMicButton(isRecording: isRecording)
     }
 }
 
@@ -308,7 +355,7 @@ extension MainViewController {
     }
     
     private func updateClearButton(isBackspace: Bool) {
-        buttonsStackView.updateAllClearButton(isBackspace: isBackspace)
+        buttonsStackView.updateClearButton(isBackspace: isBackspace)
     }
 }
 
@@ -354,5 +401,38 @@ extension MainViewController {
         let result = decimalPart.isEmpty ? normalizedInteger : "\(normalizedInteger).\(decimalPart)"
         
         return isNegative ? "-\(result)" : result
+    }
+}
+
+extension MainViewController {
+    private func startRecording() {
+        do {
+            try speechController.startRecording()
+        } catch {
+            print("Could not begin recording")
+        }
+    }
+    
+    private func stopRecording() {
+        speechController.stopRecording()
+    }
+}
+
+// MARK: SpeechController
+
+extension MainViewController: SpeechControllerDelegate {
+    func speechController(_ speechController: SpeechController, didRecogniseText text: String) {
+        print("Text: \(text)")
+        guard let lastWord = text.components(separatedBy: .whitespaces).last?.lowercased(), let character = textAndButton[lastWord], let button = Button(rawValue: character) else {
+            return
+        }
+    
+        if button.isOperator {
+            didTapOperatorButton(button)
+        } else if button.isNumber {
+            didTapNumberButton(button)
+        } else if button == .equals {
+            didTapEqualsButton()
+        }
     }
 }

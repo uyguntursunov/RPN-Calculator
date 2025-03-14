@@ -37,12 +37,6 @@ class LabelScrollView: UIScrollView {
             scrollToEnd()
             isInitialLoad = false
         }
-        
-        if self.panGestureRecognizer.translation(in: self.superview).x > 0 {
-           print("left")
-        } else {
-           print("right")
-        }
     }
     
     private func setupScrollView() {
@@ -50,7 +44,6 @@ class LabelScrollView: UIScrollView {
         self.bounces = false
         self.backgroundColor = .clear
         self.addSubview(label)
-        self.delegate = self
         
         let initialText = NSMutableAttributedString(string: "0")
         updateText(attributedText: initialText)
@@ -84,11 +77,5 @@ class LabelScrollView: UIScrollView {
         }
         
         label.font = .systemFont(ofSize: fontSize, weight: .medium)
-    }
-}
-
-extension LabelScrollView: UIScrollViewDelegate {
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("Dragging ended")
     }
 }

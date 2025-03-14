@@ -8,7 +8,7 @@
 import UIKit
 
 enum Button: String, CaseIterable {
-    case allClear = "AC"
+    case clear = "AC"
     case backspace = "⌫"
     case openParenthesis = "("
     case closeParenthesis = ")"
@@ -25,7 +25,7 @@ enum Button: String, CaseIterable {
     case two = "2"
     case three = "3"
     case add = "+"
-    case clear = "C"
+    case mic = "M"
     case zero = "0"
     case decimalSeparator = "."
     case equals = "="
@@ -44,18 +44,18 @@ enum Button: String, CaseIterable {
     }
     
     static let allCases: [Button] = [
-        .allClear, .openParenthesis, .closeParenthesis, .divide,
+        .clear, .openParenthesis, .closeParenthesis, .divide,
         .seven, .eight, .nine, .multiply,
         .four, .five, .six, .subtract,
         .one, .two, .three, .add,
-        .clear, .zero, .decimalSeparator, .equals
+        .mic, .zero, .decimalSeparator, .equals
     ]
     
     var backgroundColor: UIColor {
         switch self {
         case .divide, .multiply, .add, .subtract, .equals:
             return .operationButton
-        case .allClear, .openParenthesis, .closeParenthesis, .backspace:
+        case .clear, .openParenthesis, .closeParenthesis, .backspace:
             return .funcButton
         default:
             return .numButton

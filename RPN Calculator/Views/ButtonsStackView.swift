@@ -13,7 +13,7 @@ private enum ClearButtonState {
     
     var button: Button {
         switch self {
-        case .allClear: return .allClear
+        case .allClear: return .clear
         case .backspace: return .backspace
         }
     }
@@ -21,10 +21,13 @@ private enum ClearButtonState {
 
 class ButtonsStackView: UIStackView {
     
-    private var allClearButton: UIButton?
+    private var clearButton: UIButton?
+    private var micButton: UIButton?
     private var currentAllClearState: ClearButtonState = .allClear
+    private let mySpacing: CGFloat = 10.0
+    private let animationLayer = CALayer()
+    
     weak var delegate: MainViewControllerDelegate?
-    let mySpacing: CGFloat = 10.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,19 +59,20 @@ class ButtonsStackView: UIStackView {
             for col in 0 ..< numOfColumns {
                 let index = row * numOfColumns + col
                 guard index < buttons.count else { continue }
-                let calculatorButton = buttons[index]
+                let calcButton = buttons[index]
                 let button = RoundedButton()
                 
-                button.setTitle(calculatorButton.rawValue, for: .normal)
+                button.configure(title: calcButton.rawValue, backgroundColor: calcButton.backgroundColor, fontSize: calcButton.fontSize, fontWeight: calcButton.fontWeight)
                 button.setTitleColor(.label, for: .normal)
-                button.backgroundColor = calculatorButton.backgroundColor
-                button.titleLabel?.font = UIFont.systemFont(ofSize: calculatorButton.fontSize, weight: calculatorButton.fontWeight)
                 
-                if calculatorButton == .allClear {
-                    allClearButton = button
+                clearButton = calcButton == .clear ? button : clearButton
+                micButton = calcButton == .mic ? button : micButton
+                
+                if calcButton == .mic {
+                    configureMicButton()
                 }
                 
-                let buttonAction = setButtonAction(calculatorButton)
+                let buttonAction = setButtonAction(calcButton)
                 if let buttonAction = buttonAction { button.addTarget(self, action: buttonAction, for: .touchUpInside) }
                 horizontalSv.addArrangedSubview(button)
             }
@@ -81,10 +85,42 @@ class ButtonsStackView: UIStackView {
 // MARK: ButtonsStackView Extension
 
 extension ButtonsStackView {
+    func updateClearButton(isBackspace: Bool) {
+        currentAllClearState = isBackspace ? .backspace : .allClear
+        let buttonConfig = currentAllClearState.button
+        
+        clearButton?.configure(title: buttonConfig.rawValue, backgroundColor: buttonConfig.backgroundColor, fontSize: buttonConfig.fontSize, fontWeight: buttonConfig.fontWeight)
+        
+        clearButton?.removeTarget(nil, action: nil, for: .touchUpInside)
+        if let action = setButtonAction(buttonConfig) {
+            clearButton?.addTarget(self, action: action, for: .touchUpInside)
+        }
+    }
+    
+    func configureMicButton() {
+        micButton?.setTitle("", for: .normal)
+        micButton?.setImage(SFSymbols.microphone, for: .normal)
+        micButton?.tintColor = .label
+    }
+    
+    func updateMicButton(isRecording: Bool) {
+        micButton?.backgroundColor = isRecording ? .operationButton : .numButton
+        if isRecording {
+            micButton?.startAnimation()
+        } else {
+            micButton?.stopAnimation()
+        }
+    }
+}
+
+
+// MARK: Calculator Buttons' Actions
+
+extension ButtonsStackView {
     private func setButtonAction(_ button: Button) -> Selector? {
         var buttonAction: Selector?
         switch button {
-        case .allClear:
+        case .clear:
             buttonAction = #selector(didTapClearButton)
         case .equals:
             buttonAction = #selector(didTapEqualsButton)
@@ -98,8 +134,8 @@ extension ButtonsStackView {
             buttonAction = #selector(didTapCloseParenthesisButton)
         case .backspace:
             buttonAction = #selector(didTapBackspaceButton)
-        case .clear:
-            break
+        case .mic:
+            buttonAction = #selector(didTapCButton)
         default:
             buttonAction = #selector(didTapNumberButton(_:))
         }
@@ -107,29 +143,9 @@ extension ButtonsStackView {
         return buttonAction
     }
     
-    func updateAllClearButton(isBackspace: Bool) {
-        guard let button = allClearButton else { return }
-        currentAllClearState = isBackspace ? .backspace : .allClear
-        let buttonConfig = currentAllClearState.button
-        
-        button.setTitle(buttonConfig.rawValue, for: .normal)
-        button.backgroundColor = buttonConfig.backgroundColor
-        button.titleLabel?.font = UIFont.systemFont(ofSize: buttonConfig.fontSize,
-                                                    weight: buttonConfig.fontWeight)
-        
-        button.removeTarget(nil, action: nil, for: .touchUpInside)
-        if let action = setButtonAction(buttonConfig) {
-            button.addTarget(self, action: action, for: .touchUpInside)
-        }
-    }
-}
-
-// MARK: Calculator Buttons' Actions
-
-extension ButtonsStackView {
     @objc func didTapNumberButton(_ sender: UIButton) {
-        guard let element = sender.currentTitle else { return }
-        delegate?.didTapNumberButton(element)
+        guard let element = sender.currentTitle, let num = Button(rawValue: element) else { return }
+        delegate?.didTapNumberButton(num)
     }
     
     @objc func didTapOperatorButton(_ sender: UIButton) {
@@ -159,5 +175,9 @@ extension ButtonsStackView {
     
     @objc func didTapClearButton() {
         delegate?.didTapClearButton()
+    }
+    
+    @objc func didTapCButton() {
+        delegate?.didTapMicButton()
     }
 }

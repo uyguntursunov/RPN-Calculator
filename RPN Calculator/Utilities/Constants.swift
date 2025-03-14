@@ -7,6 +7,12 @@
 
 import UIKit
 
+let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular, scale: .default)
+
 enum Errors: String {
     case undefined = "Undefined"
+}
+
+enum SFSymbols {
+    static let microphone = UIImage(systemName: "microphone", withConfiguration: largeConfig)
 }
