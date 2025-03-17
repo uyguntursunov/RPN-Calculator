@@ -56,39 +56,11 @@ class MainViewController: UIViewController {
         }
     }
     
-    private lazy var textAndButton: Dictionary<String, String> = {
-        return ["zero": "0",
-                "one": "1",
-                "two": "2",
-                "three": "3",
-                "four": "4",
-                "five": "5",
-                "six": "6",
-                "seven": "7",
-                "eight": "8",
-                "nine": "9",
-                "ten": "10",
-                "plus": "+",
-                "minus": "-",
-                "equals": "=",
-                "0": "0",
-                "1": "1",
-                "2": "2",
-                "3": "3",
-                "4": "4",
-                "5": "5",
-                "6": "6",
-                "7": "7",
-                "8": "8",
-                "9": "9",
-                "10": "10",]
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureLayout()
-//        fetchCalculations()
+        //        fetchCalculations()
     }
     
     private func configureLayout() {
@@ -159,7 +131,7 @@ extension MainViewController: MainViewControllerDelegate {
     func didTapOperatorButton(_ op: Button) {
         guard op.isOperator, firstElement != Errors.undefined.rawValue else { return }
         
-        if op == .subtract && (expression.isEmpty || lastElement == Button.openParenthesis.rawValue || Button(rawValue: lastElement)?.isOperator == true) {
+        if op == .subtract && (expression.isEmpty || lastElement == Button.openParenthesis.rawValue || Button(rawValue: lastElement)?.isHighPriorityOperator == true) {
             // Treat "-" as part of a negative number after "(", at start, or after another operator
             expression.append(op.rawValue)
             isNegativeNumber = true
@@ -267,7 +239,7 @@ extension MainViewController: MainViewControllerDelegate {
         updateClearButton(isBackspace: false)
         isRecalculation = true
         isNegativeNumber = false
-//        saveCalculation(model: Calculator(expression: expression, result: calculationResult))
+        //        saveCalculation(model: Calculator(expression: expression, result: calculationResult))
     }
     
     func didTapBackspaceButton() {
@@ -418,21 +390,59 @@ extension MainViewController {
     }
 }
 
-// MARK: SpeechController
+// MARK: SpeechControllerDelegate
 
 extension MainViewController: SpeechControllerDelegate {
     func speechController(_ speechController: SpeechController, didRecogniseText text: String) {
-        print("Text: \(text)")
-        guard let lastWord = text.components(separatedBy: .whitespaces).last?.lowercased(), let character = textAndButton[lastWord], let button = Button(rawValue: character) else {
-            return
+        print("Original Text: \(text)")
+        
+        let normalizedText = text
+            .replacingOccurrences(of: "+", with: " + ")
+            .replacingOccurrences(of: "-", with: " - ")
+            .replacingOccurrences(of: "*", with: " * ")
+            .replacingOccurrences(of: "/", with: " / ")
+        
+        let components = normalizedText.split(separator: " ").map { String($0) }
+        var processedComponents: [String] = []
+        
+        for component in components {
+            if let number = Int(component), number > 9 {
+                let digits = String(number).map { String($0) }
+                processedComponents.append(contentsOf: digits)
+            } else {
+                if let element = wordToElement[component.lowercased()] {
+                    processedComponents.append(element)
+                } else {
+                    processedComponents.append(component)
+                }
+            }
         }
-    
-        if button.isOperator {
-            didTapOperatorButton(button)
-        } else if button.isNumber {
-            didTapNumberButton(button)
-        } else if button == .equals {
-            didTapEqualsButton()
+        
+        if let lastWord = processedComponents.last?.lowercased(), let button = Button(rawValue: lastWord) {
+            
+            if button.isOperator {
+                didTapOperatorButton(button)
+            } else if button.isNumber {
+                didTapNumberButton(button)
+            }
+            
+            switch button {
+            case .equals:
+                didTapEqualsButton()
+            case .openParenthesis:
+                didTapOpenParenthesisButton()
+            case .closeParenthesis:
+                didTapCloseParenthesisButton()
+            case .decimalSeparator:
+                didTapDecimalButton()
+            case .clear:
+                didTapClearButton()
+            case .backspace:
+                didTapBackspaceButton()
+            case .mic:
+                didTapMicButton()
+            default: break
+            }
         }
     }
 }

@@ -79,4 +79,13 @@ enum Button: String, CaseIterable {
             return .medium
         }
     }
+    
+    var isHighPriorityOperator: Bool {
+        switch self {
+        case .multiply, .divide:
+            return true
+        default:
+            return false
+        }
+    }
 }

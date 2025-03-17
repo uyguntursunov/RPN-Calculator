@@ -145,7 +145,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 64KM8W992F;
+				DEVELOPMENT_TEAM = L7D5MM5SF3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RPN Calculator/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The access to your microphone will be needed to recognise the speech.";
@@ -173,7 +173,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 64KM8W992F;
+				DEVELOPMENT_TEAM = L7D5MM5SF3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RPN Calculator/Info.plist";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The access to your microphone will be needed to recognise the speech.";
