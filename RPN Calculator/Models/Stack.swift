@@ -15,14 +15,14 @@ struct Stack<T> {
     }
     
     mutating func pop() -> T? {
-        return items.popLast()
+        items.popLast()
     }
     
     var peek: T? {
-        return items.last
+        items.last
     }
     
     var isEmpty: Bool {
-        return items.isEmpty
+        items.isEmpty
     }
 }

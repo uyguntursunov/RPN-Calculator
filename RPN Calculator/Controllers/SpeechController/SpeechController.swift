@@ -12,7 +12,7 @@ class SpeechController {
     private static let inputNodeBus: AVAudioNodeBus = 0
     
     /// The speech recogniser used by the controller to record the user's speech.
-    private let speechRecogniser = SFSpeechRecognizer(locale: Locale(identifier: "en-GB"))!
+    private let speechRecogniser = SFSpeechRecognizer(locale: Locale(identifier: "ru-Ru"))!
     
     /// The current speech recognition request. Created when the user wants to begin speech recognition.
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?

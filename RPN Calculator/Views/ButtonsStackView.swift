@@ -39,32 +39,29 @@ class ButtonsStackView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureLayout() {
+    func configureLayout(shouldRemoveAllElements: Bool = false) {
         axis = .vertical
         alignment = .fill
         distribution = .fillEqually
         spacing = mySpacing
         
-        let numOfRows: Int = 5
-        let numOfColumns: Int = 4
-        let buttons = Button.allCases
+        if shouldRemoveAllElements {
+            arrangedSubviews.forEach { $0.removeFromSuperview() }
+        }
         
-        for row in 0 ..< numOfRows {
+        let buttons = UIDevice.current.orientation.isLandscape ? Button.allCasesLandscape : Button.allCases
+        
+        for row in 0 ..< buttons.count {
             let horizontalSv = UIStackView()
             horizontalSv.axis = .horizontal
             horizontalSv.alignment = .fill
             horizontalSv.distribution = .fillEqually
             horizontalSv.spacing = mySpacing
             
-            for col in 0 ..< numOfColumns {
-                let index = row * numOfColumns + col
-                guard index < buttons.count else { continue }
-                let calcButton = buttons[index]
-                let button = RoundedButton()
-                
-                button.configure(title: calcButton.rawValue, backgroundColor: calcButton.backgroundColor, fontSize: calcButton.fontSize, fontWeight: calcButton.fontWeight)
-                button.setTitleColor(.label, for: .normal)
-                
+            for col in 0 ..< buttons[row].count {
+                let calcButton = buttons[row][col]
+                let button = RoundedButton(button: calcButton)
+                                
                 clearButton = calcButton == .clear ? button : clearButton
                 micButton = calcButton == .mic ? button : micButton
                 
@@ -89,7 +86,7 @@ extension ButtonsStackView {
         currentAllClearState = isBackspace ? .backspace : .allClear
         let buttonConfig = currentAllClearState.button
         
-        clearButton?.configure(title: buttonConfig.rawValue, backgroundColor: buttonConfig.backgroundColor, fontSize: buttonConfig.fontSize, fontWeight: buttonConfig.fontWeight)
+        clearButton?.configure(button: buttonConfig)
         
         clearButton?.removeTarget(nil, action: nil, for: .touchUpInside)
         if let action = setButtonAction(buttonConfig) {

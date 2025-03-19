@@ -7,12 +7,12 @@
 
 import UIKit
 
-class RoundedButton: UIButton {
+final class RoundedButton: UIButton {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    init(button: Button) {
+        super.init(frame: .zero)
         setupButton()
+        configure(button: button)
     }
     
     required init?(coder: NSCoder) {
@@ -54,14 +54,44 @@ class RoundedButton: UIButton {
             
             color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
             
-            // If brightness is already high, reduce saturation instead
             if brightness > 0.9 {
-                let newSaturation = max(saturation - 0.3, 0.0) // Desaturate by 30%
+                let newSaturation = max(saturation - 0.3, 0.0)
                 return UIColor(hue: hue, saturation: newSaturation, brightness: brightness, alpha: alpha)
             } else {
-                // For less bright colors, increase brightness
                 let newBrightness = min(brightness + 0.2, 1.0)
                 return UIColor(hue: hue, saturation: saturation, brightness: newBrightness, alpha: alpha)
             }
         }
+}
+
+extension UIButton {
+    func configure(button: Button) {
+        self.setTitle(button.rawValue, for: .normal)
+        self.backgroundColor = button.backgroundColor
+        self.titleLabel?.font = .systemFont(ofSize: button.fontSize, weight: button.fontWeight)
+        self.setTitleColor(.label, for: .normal)
+    }
+    
+    func startAnimation() {
+        let pulseAnimation = CABasicAnimation(keyPath: "transform.scale")
+        pulseAnimation.fromValue = 1.0
+        pulseAnimation.toValue = 1.1
+        pulseAnimation.duration = 0.6
+        pulseAnimation.autoreverses = true
+        pulseAnimation.repeatCount = .infinity
+        self.layer.add(pulseAnimation, forKey: "pulsing")
+        
+        let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+        opacityAnimation.fromValue = 1.0
+        opacityAnimation.toValue = 0.7
+        opacityAnimation.duration = 0.6
+        opacityAnimation.autoreverses = true
+        opacityAnimation.repeatCount = .infinity
+        self.layer.add(opacityAnimation, forKey: "opacity")
+    }
+    
+    func stopAnimation() {
+        self.layer.removeAnimation(forKey: "pulsing")
+        self.layer.removeAnimation(forKey: "opacity")
+    }
 }

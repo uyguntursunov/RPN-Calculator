@@ -63,6 +63,15 @@ class MainViewController: UIViewController {
         //        fetchCalculations()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.current.orientation.isLandscape {
+            buttonsStackView.configureLayout(shouldRemoveAllElements: true)
+        } else {
+            buttonsStackView.configureLayout(shouldRemoveAllElements: true)
+        }
+    }
+    
     private func configureLayout() {
         view.backgroundColor = .systemBackground
         addSubviews()
@@ -232,8 +241,6 @@ extension MainViewController: MainViewControllerDelegate {
         let calculationResult = calculator.result
         
         guard Button(rawValue: lastElement)?.isOperator != true else { return }
-        print("Result: \(calculationResult)")
-        print("Last element:", lastElement)
         
         expression = calculationResult.isNaN ? [Errors.undefined.rawValue] : checkResult(calculationResult: calculationResult)
         updateClearButton(isBackspace: false)
@@ -285,7 +292,6 @@ extension MainViewController {
     private func calculate() {
         calculator.expression = expression
         calculator.result = updateResult(expression: expression)
-        print("Model result", updateResult(expression: expression))
     }
     
     private func updateDisplay() {

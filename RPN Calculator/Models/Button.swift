@@ -43,12 +43,19 @@ enum Button: String, CaseIterable {
         }
     }
     
-    static let allCases: [Button] = [
-        .clear, .openParenthesis, .closeParenthesis, .divide,
-        .seven, .eight, .nine, .multiply,
-        .four, .five, .six, .subtract,
-        .one, .two, .three, .add,
-        .mic, .zero, .decimalSeparator, .equals
+    static let allCases: [[Button]] = [
+        [.clear, .openParenthesis, .closeParenthesis, .divide],
+        [.seven, .eight, .nine, .multiply],
+        [.four, .five, .six, .subtract],
+        [.one, .two, .three, .add],
+        [.mic, .zero, .decimalSeparator, .equals]
+    ]
+    
+    static let allCasesLandscape: [[Button]] = [
+        [.seven, .eight, .nine, .backspace, .divide],
+        [.four, .five, .six, .openParenthesis, .multiply],
+        [.one, .two, .three, .closeParenthesis, .subtract],
+        [.mic, .zero, .decimalSeparator, .equals, .add]
     ]
     
     var backgroundColor: UIColor {
