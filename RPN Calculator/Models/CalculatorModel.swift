@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Calculator {
+struct CalculatorModel {
     var expression: [String]
     var result: Double
 }
