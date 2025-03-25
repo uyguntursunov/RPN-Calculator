@@ -19,6 +19,7 @@ class LabelScrollView: UIScrollView {
     }()
     
     private var isInitialLoad: Bool = true
+    private var previousLabelWidth: CGFloat = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,11 +33,14 @@ class LabelScrollView: UIScrollView {
     override func layoutSubviews() {
         super.layoutSubviews()
         label.frame = CGRect(x: 0, y: 0, width: contentSize.width, height: self.bounds.height)
-        
         if isInitialLoad {
             scrollToEnd()
             isInitialLoad = false
+        } else if bounds.width != previousLabelWidth {
+            scrollToEnd() // Call scrollToEnd unconditionally when width changes
         }
+    
+        previousLabelWidth = bounds.width
     }
     
     private func setupScrollView() {
@@ -58,7 +62,7 @@ class LabelScrollView: UIScrollView {
         scrollToEnd()
     }
     
-    private func scrollToEnd() {
+    func scrollToEnd() {
         let rightOffset = CGPoint(x: contentSize.width - bounds.width, y: 0)
         setContentOffset(rightOffset, animated: false)
     }
@@ -67,15 +71,14 @@ class LabelScrollView: UIScrollView {
         var fontSize: CGFloat = 65.0
         if let count = label.text?.count {
             switch count {
-            case 9:
+            case 11:
                 fontSize = 65.0 * 0.95
-            case 10...:
+            case 12...:
                 fontSize = 65.0 * 0.85
             default:
                 fontSize = 65.0
             }
         }
-        
         label.font = .systemFont(ofSize: fontSize, weight: .medium)
     }
 }

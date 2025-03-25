@@ -18,7 +18,9 @@ class DataPersistencyManager {
     
     static let shared = DataPersistencyManager()
     
-    func saveCalculation(model: Calculator, completion: @escaping(Result<Void, Error>) -> Void) {
+    private init() { }
+    
+    func saveCalculation(model: CalculatorModel, completion: @escaping(Result<Void, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
         let entity = CalculationEntity(context: context)

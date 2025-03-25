@@ -7,16 +7,25 @@
 
 import UIKit
 
-let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular, scale: .default)
+// MARK: - Configurations
+fileprivate let largeConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular, scale: .default)
+
+// MARK: - Errors
+enum CalculationError: Error {
+    case invalidExpression
+    case invalidResult
+}
 
 enum Errors: String {
     case undefined = "Undefined"
 }
 
+// MARK: - SFSymbols
 enum SFSymbols {
     static let microphone = UIImage(systemName: "microphone", withConfiguration: largeConfig)
 }
 
+// MARK: - Constants
 let wordToElement: [String: String] = [
     "ноль": "0",
     "один": "1",
@@ -39,5 +48,5 @@ let wordToElement: [String: String] = [
     "очисти": "AC",
     "удали": "⌫",
     "стоп": "M"
-    
 ]
+

@@ -8,7 +8,7 @@
 import UIKit
 
 final class RoundedButton: UIButton {
-    
+
     init(button: Button) {
         super.init(frame: .zero)
         setupButton()
@@ -47,21 +47,21 @@ final class RoundedButton: UIButton {
     }
     
     private func highlightColor(_ color: UIColor) -> UIColor {
-            var hue: CGFloat = 0
-            var saturation: CGFloat = 0
-            var brightness: CGFloat = 0
-            var alpha: CGFloat = 0
-            
-            color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-            
-            if brightness > 0.9 {
-                let newSaturation = max(saturation - 0.3, 0.0)
-                return UIColor(hue: hue, saturation: newSaturation, brightness: brightness, alpha: alpha)
-            } else {
-                let newBrightness = min(brightness + 0.2, 1.0)
-                return UIColor(hue: hue, saturation: saturation, brightness: newBrightness, alpha: alpha)
-            }
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        
+        if brightness > 0.9 {
+            let newSaturation = max(saturation - 0.3, 0.0)
+            return UIColor(hue: hue, saturation: newSaturation, brightness: brightness, alpha: alpha)
+        } else {
+            let newBrightness = min(brightness + 0.2, 1.0)
+            return UIColor(hue: hue, saturation: saturation, brightness: newBrightness, alpha: alpha)
         }
+    }
 }
 
 extension UIButton {
