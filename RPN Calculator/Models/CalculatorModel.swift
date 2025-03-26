@@ -100,32 +100,3 @@ struct CalculatorModel: CalculatorModelProtocol {
         }
     }
 }
-
-// MARK: Persistency Manager
-
-extension CalculatorModel {
-    func saveCalculation(model: CalculatorModel) {
-        DataPersistencyManager.shared.saveCalculation(model: model) { result in
-            switch result {
-            case .success(()):
-                print("Calculation saved successfully")
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    func fetchCalculations() -> [CalculationEntity] {
-        var calculations: [CalculationEntity] = []
-        DataPersistencyManager.shared.fetchCalculationsFromDatabase { result in
-            switch result {
-            case .success(let data):
-                calculations = data
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-        
-        return calculations
-    }
-}

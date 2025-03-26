@@ -97,7 +97,6 @@ class CalculatorViewModel {
         
         isRecalculation = true
         isNegativeNumber = false
-        //        saveCalculation(model: CalculatorModel(expression: expression, result: result))
     }
     
     // MARK: Input Handling
