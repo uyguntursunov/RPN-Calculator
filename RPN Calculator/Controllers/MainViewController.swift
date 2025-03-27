@@ -23,8 +23,9 @@ class MainViewController: UIViewController {
     private let buttonsStackView = ButtonsStackView()
     private let labelScrollView = LabelScrollView()
     private let viewModel = CalculatorViewModel()
+    
+    private var calculatorState: CalculatorState = .initial
     private var isRecording: Bool = false
-    private var isFinalResult: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +78,10 @@ class MainViewController: UIViewController {
         viewModel.clearButtonStateDidChange = { [weak self] isBackspace in
             self?.buttonsStackView.updateClearButton(isBackspace: isBackspace)
         }
+        
+        viewModel.calculatorStateDidChange = { [weak self] state in
+            self?.calculatorState = state
+        }
     }
     
     private func formatExpression(expression: [String]) -> [String] {
@@ -89,17 +94,45 @@ class MainViewController: UIViewController {
     }
     
     private func formatWithThousandsSeparator(_ number: String) -> String {
-        guard let value = Double(number) else { return number }
         let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
         formatter.groupingSeparator = ","
         formatter.decimalSeparator = "."
-        formatter.minimumIntegerDigits = 1
-        formatter.maximumFractionDigits = 10
         
+        if number.contains("e") || number.contains("E") {
+            if calculatorState != .initial { return number }
+            guard let value = Double(number) else { return number }
+            formatter.numberStyle = .decimal
+//            return formatter.string(from: NSNumber(value: value)) ?? number
+            return String(format: "%g", number)
+        }
+        
+        guard let value = Double(number) else { return number }
         let absValue = abs(value)
-        if isFinalResult && (absValue >= 1e10 || (absValue > 0 && absValue < 1e-3)) {
-            return String(format: "%g", value)
+        
+        let components = number.split(separator: ".")
+        let hasDecimal = components.count == 2
+        
+        print("State", calculatorState)
+        print("Abs value", absValue)
+        print("Condition", absValue >= 1e10)
+        
+        if calculatorState == .calculatedResult && (absValue >= 1e10 || (absValue > 0 && absValue < 1e-3)) {
+            formatter.numberStyle = .scientific
+            formatter.exponentSymbol = "e"
+            return String(format: "%g", number)
+        } else {
+            formatter.numberStyle = .decimal
+            formatter.maximumFractionDigits = 15
+            formatter.maximumIntegerDigits = 15
+            
+            if hasDecimal {
+                let decimalPart = components[1]
+                let decimalPlaces = decimalPart.count
+                formatter.minimumFractionDigits = decimalPlaces
+                formatter.maximumFractionDigits = max(decimalPlaces, 15)
+            } else {
+                formatter.minimumFractionDigits = 0
+            }
         }
         
         return formatter.string(from: NSNumber(value: value)) ?? number
@@ -118,7 +151,7 @@ extension MainViewController: MainViewControllerDelegate {
     }
 }
 
-// MARK: Recording Speech 
+// MARK: Recording Speech
 
 extension MainViewController {
     func toggleRecording() {

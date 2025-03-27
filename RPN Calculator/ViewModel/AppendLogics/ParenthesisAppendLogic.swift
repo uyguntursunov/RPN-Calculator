@@ -8,22 +8,12 @@
 import Foundation
 
 struct ParenthesisAppendLogic {
-    private let conditions: CalculatorViewModelConditions
+    private let conditions: ConditionsHandlerProtocol
     
-    init(conditions: CalculatorViewModelConditions) {
+    init(conditions: ConditionsHandlerProtocol) {
         self.conditions = conditions
     }
-    
-    // Enum defining possible actions for appending parentheses
-    enum Action {
-        case startNewOpenParenthesis
-        case implicitlyMultiplyAndOpen
-        case appendOpenParenthesis
-        case appendCloseParenthesis
-        case noChange
-    }
-    
-    // Determine the action based on conditions
+
     func determineAction(for expression: [String], with parenthesis: Button, isRecalculation: Bool, openCount: Int, closeCount: Int) -> Action {
         let lastElement = expression.last ?? ""
         let canClose = openCount > closeCount &&
@@ -35,7 +25,7 @@ struct ParenthesisAppendLogic {
         case .openParenthesis:
             if isRecalculation || conditions.isInitialExpression(expression) {
                 return .startNewOpenParenthesis
-            } else if conditions.isNumber(element: lastElement) || conditions.isCloseParanthesis(expression) {
+            } else if conditions.isNumber(lastElement) || conditions.isCloseParanthesis(expression) {
                 return .implicitlyMultiplyAndOpen
             } else {
                 return .appendOpenParenthesis
@@ -49,5 +39,13 @@ struct ParenthesisAppendLogic {
         default:
             return .noChange
         }
+    }
+    
+    enum Action {
+        case startNewOpenParenthesis
+        case implicitlyMultiplyAndOpen
+        case appendOpenParenthesis
+        case appendCloseParenthesis
+        case noChange
     }
 }

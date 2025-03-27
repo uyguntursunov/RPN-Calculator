@@ -6,19 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		D59B60BC2D92F5FA0028A895 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D510188D2D7AB131003E613B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D51018942D7AB131003E613B;
-			remoteInfo = "RPN Calculator";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		D51018952D7AB131003E613B /* RPN Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RPN Calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D59B60B82D92F5FA0028A895 /* RPN CalculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RPN CalculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -40,22 +29,10 @@
 			path = "RPN Calculator";
 			sourceTree = "<group>";
 		};
-		D59B60B92D92F5FA0028A895 /* RPN CalculatorTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "RPN CalculatorTests";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D51018922D7AB131003E613B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D59B60B52D92F5FA0028A895 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -69,7 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				D51018972D7AB131003E613B /* RPN Calculator */,
-				D59B60B92D92F5FA0028A895 /* RPN CalculatorTests */,
 				D51018962D7AB131003E613B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,7 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				D51018952D7AB131003E613B /* RPN Calculator.app */,
-				D59B60B82D92F5FA0028A895 /* RPN CalculatorTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,29 +83,6 @@
 			productReference = D51018952D7AB131003E613B /* RPN Calculator.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D59B60B72D92F5FA0028A895 /* RPN CalculatorTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D59B60C02D92F5FA0028A895 /* Build configuration list for PBXNativeTarget "RPN CalculatorTests" */;
-			buildPhases = (
-				D59B60B42D92F5FA0028A895 /* Sources */,
-				D59B60B52D92F5FA0028A895 /* Frameworks */,
-				D59B60B62D92F5FA0028A895 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D59B60BD2D92F5FA0028A895 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D59B60B92D92F5FA0028A895 /* RPN CalculatorTests */,
-			);
-			name = "RPN CalculatorTests";
-			packageProductDependencies = (
-			);
-			productName = "RPN CalculatorTests";
-			productReference = D59B60B82D92F5FA0028A895 /* RPN CalculatorTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -143,10 +95,6 @@
 				TargetAttributes = {
 					D51018942D7AB131003E613B = {
 						CreatedOnToolsVersion = 16.2;
-					};
-					D59B60B72D92F5FA0028A895 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = D51018942D7AB131003E613B;
 					};
 				};
 			};
@@ -165,20 +113,12 @@
 			projectRoot = "";
 			targets = (
 				D51018942D7AB131003E613B /* RPN Calculator */,
-				D59B60B72D92F5FA0028A895 /* RPN CalculatorTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D51018932D7AB131003E613B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D59B60B62D92F5FA0028A895 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -195,22 +135,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D59B60B42D92F5FA0028A895 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D59B60BD2D92F5FA0028A895 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D51018942D7AB131003E613B /* RPN Calculator */;
-			targetProxy = D59B60BC2D92F5FA0028A895 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D51018A92D7AB132003E613B /* Debug */ = {
@@ -227,8 +152,7 @@
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need your access to use the speech recognition.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -256,8 +180,7 @@
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need your access to use the speech recognition.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -390,44 +313,6 @@
 			};
 			name = Release;
 		};
-		D59B60BE2D92F5FA0028A895 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 64KM8W992F;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.uyguntursunov.RPN-CalculatorTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RPN Calculator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RPN Calculator";
-			};
-			name = Debug;
-		};
-		D59B60BF2D92F5FA0028A895 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 64KM8W992F;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.uyguntursunov.RPN-CalculatorTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RPN Calculator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RPN Calculator";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -445,15 +330,6 @@
 			buildConfigurations = (
 				D51018A92D7AB132003E613B /* Debug */,
 				D51018AA2D7AB132003E613B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D59B60C02D92F5FA0028A895 /* Build configuration list for PBXNativeTarget "RPN CalculatorTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D59B60BE2D92F5FA0028A895 /* Debug */,
-				D59B60BF2D92F5FA0028A895 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

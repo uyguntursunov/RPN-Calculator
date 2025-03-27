@@ -13,29 +13,21 @@ protocol CalculatorModelProtocol {
 }
 
 struct CalculatorModel: CalculatorModelProtocol {
-    let expression: [String]
-    let result: Double
-    
     func convertToRPN(_ infixExpression: [String]) -> [String] {
         var operatorsStack: Stack<String> = Stack<String>()
         var output: [String] = []
         
         for element in infixExpression {
-            // If the element is a number, append it directly
             if Double(element) != nil {
                 output.append(element)
-                // Else if the element is "(", push it to stack
             } else if element == Button.openParenthesis.rawValue {
                 operatorsStack.push(element)
-                // Else if the element is ")"
             } else if element == Button.closeParenthesis.rawValue {
-                // Pop from stack to output until "(" is found
                 while let top = operatorsStack.peek, top != Button.openParenthesis.rawValue {
                     output.append(operatorsStack.pop()!)
                 }
                 _ = operatorsStack.pop() // Remove "(" from stack
             } else {
-                // Handle operator precedence
                 while let top = operatorsStack.peek,
                       let topOp = Button(rawValue: top),
                       let currentOp = Button(rawValue: element),
