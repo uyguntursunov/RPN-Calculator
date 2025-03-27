@@ -54,8 +54,8 @@ class MainViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             buttonsStackView.topAnchor.constraint(equalTo: view.centerYAnchor, constant: -topPadding),
-            buttonsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            buttonsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            buttonsStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: padding),
+            buttonsStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -padding),
             buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding)
         ])
         
@@ -69,9 +69,8 @@ class MainViewController: UIViewController {
     
     private func bindViewModel() {
         viewModel.expressionDidChange = { [weak self] expression in
-            guard let formatted = self?.formatExpression(expression: expression).joined() else { return }
-            let attributedText = NSMutableAttributedString(string: formatted)
-            print("Formatted expression", formatted)
+            let attributedText = NSMutableAttributedString(string: expression.joined())
+            print("Formatted expression", attributedText)
             self?.labelScrollView.updateText(attributedText: attributedText)
         }
         
@@ -82,60 +81,23 @@ class MainViewController: UIViewController {
         viewModel.calculatorStateDidChange = { [weak self] state in
             self?.calculatorState = state
         }
-    }
-    
-    private func formatExpression(expression: [String]) -> [String] {
-        expression.map { element in
-            if Double(element) != nil && !element.hasSuffix(".") {
-                return formatWithThousandsSeparator(element)
-            }
-            return element
+        
+        viewModel.resultDidChange = { [weak self] result in
+            guard let formatted = self?.formatExpression(calculationResult: result) else { return }
+            let attributedText = NSMutableAttributedString(string: formatted.joined())
+            print("Formatted expression", formatted)
+            self?.labelScrollView.updateText(attributedText: attributedText)
         }
     }
     
-    private func formatWithThousandsSeparator(_ number: String) -> String {
-        let formatter = NumberFormatter()
-        formatter.groupingSeparator = ","
-        formatter.decimalSeparator = "."
-        
-        if number.contains("e") || number.contains("E") {
-            if calculatorState != .initial { return number }
-            guard let value = Double(number) else { return number }
-            formatter.numberStyle = .decimal
-//            return formatter.string(from: NSNumber(value: value)) ?? number
-            return String(format: "%g", number)
+    private func formatExpression(calculationResult: Double) -> [String] {
+        let absValue = abs(calculationResult)
+        if absValue >= 1e10 || (absValue > 0 && absValue < 1e-3) {
+            return [String(format: "%g", calculationResult)]
         }
+        let roundedValue = Double(String(format: "%.8f", calculationResult)) ?? calculationResult
         
-        guard let value = Double(number) else { return number }
-        let absValue = abs(value)
-        
-        let components = number.split(separator: ".")
-        let hasDecimal = components.count == 2
-        
-        print("State", calculatorState)
-        print("Abs value", absValue)
-        print("Condition", absValue >= 1e10)
-        
-        if calculatorState == .calculatedResult && (absValue >= 1e10 || (absValue > 0 && absValue < 1e-3)) {
-            formatter.numberStyle = .scientific
-            formatter.exponentSymbol = "e"
-            return String(format: "%g", number)
-        } else {
-            formatter.numberStyle = .decimal
-            formatter.maximumFractionDigits = 15
-            formatter.maximumIntegerDigits = 15
-            
-            if hasDecimal {
-                let decimalPart = components[1]
-                let decimalPlaces = decimalPart.count
-                formatter.minimumFractionDigits = decimalPlaces
-                formatter.maximumFractionDigits = max(decimalPlaces, 15)
-            } else {
-                formatter.minimumFractionDigits = 0
-            }
-        }
-        
-        return formatter.string(from: NSNumber(value: value)) ?? number
+        return [String(format: "%g", roundedValue)]
     }
 }
 

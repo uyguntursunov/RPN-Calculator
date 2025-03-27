@@ -34,7 +34,7 @@ class CalculatorViewModel: CalculatorViewModelProtocol {
     }
     
     private var result: Double = 0.0 {
-        didSet { resultDidChange?(String(result)) }
+        didSet { resultDidChange?(result) }
     }
     
     private var state: CalculatorState = .initial {
@@ -45,7 +45,7 @@ class CalculatorViewModel: CalculatorViewModelProtocol {
     }
     
     var expressionDidChange: (([String]) -> Void)?
-    var resultDidChange: ((String) -> Void)?
+    var resultDidChange: ((Double) -> Void)?
     var calculatorStateDidChange: ((CalculatorState) -> Void)?
     var clearButtonStateDidChange: ((Bool) -> Void)?
     
@@ -75,11 +75,7 @@ class CalculatorViewModel: CalculatorViewModelProtocol {
         let rpn = model.convertToRPN(expression)
         result = model.calculateRPN(rpn)
         
-        if result.isNaN {
-            expression = [Errors.undefined.rawValue]
-        } else {
-            expression = [String(result)]
-        }
+        if result.isNaN { expression = [Errors.undefined.rawValue] }
         state = .calculatedResult
     }
     
