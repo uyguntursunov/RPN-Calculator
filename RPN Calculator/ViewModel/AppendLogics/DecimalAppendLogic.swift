@@ -14,15 +14,6 @@ struct DecimalAppendLogic {
         self.conditions = conditions
     }
     
-    // Enum defining possible actions for appending a decimal
-    enum Action {
-        case noChange
-        case appendZeroDecimal
-        case startNewDecimal
-        case appendDecimalToLast
-    }
-    
-    // Determine the action based on conditions
     func determineAction(for expression: [String], isRecalculation: Bool) -> Action {
         if conditions.isInvalidState(expression) || conditions.isDecimal(expression) {
             return .noChange
@@ -33,5 +24,12 @@ struct DecimalAppendLogic {
         } else {
             return .appendDecimalToLast
         }
+    }
+    
+    enum Action {
+        case noChange
+        case appendZeroDecimal
+        case startNewDecimal
+        case appendDecimalToLast
     }
 }

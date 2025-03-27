@@ -33,9 +33,9 @@ struct OperatorAppendLogic {
         let isNegativeCase = conditions.isExpressionEmpty(expression) ||
                             conditions.isOpenParanthesis(expression) ||
                             conditions.isHighPriorityOperator(expression)
-        let isSubtractOperator = conditions.isSubtract(element: button.rawValue)
+        let isSubtractOperator = conditions.isSubtract(button.rawValue)
         let isLastOperator = conditions.isOperator(expression)
-        let isLastSubtract = conditions.isSubtract(element: lastElement)
+        let isLastSubtract = conditions.isSubtract(lastElement)
         let isLastOpenParens = conditions.isOpenParanthesis(expression)
         
         if isNegativeCase && isSubtractOperator {
